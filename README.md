@@ -8,10 +8,11 @@ Team:
 
 # Contents
 
-assignment1: java web application to show the tweets on the map
-	- *tweet_fetcher*: fetches tweets from Twitter API.
-	- *keyword_extractor*: analyzes the fetched tweets text and tags the tweets if they have certain keywords.
-	- *sentiment_analyzer*: calls external API to retrieve a sentiment score for the tweet.
-	- *compressor*: clusters the tweets related with the same keyword and with the same sentiment. Uses k-means clustering.
-	- *web_interface*: displays tweets and sentiments in a heatmap for the end user.
-	- Tomcat: folder where Tomcat is installed, so the whole assignment is auto-contained
+* **assignment1**: java web application to show the tweets on the map
+* **tweet_fetcher**: fetches tweets from Twitter API.
+* **keyword_extractor**: analyzes the fetched tweets text and tags the tweets if they have certain keywords.
+* **sentiment_analyzer**: calls external API to retrieve a sentiment score for the tweet.
+* **compressor**: clusters the tweets related with the same keyword and with the same sentiment. Uses k-means clustering.
+* **web_interface**: displays tweets and sentiments in a heatmap for the end user.
+* **Tomcat**: folder where Tomcat is installed, so the whole assignment is auto-contained
+* **Servers**: eclipse servers for testing and debugging locally
