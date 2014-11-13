@@ -119,7 +119,7 @@ Heatmap.prototype.addNegativeHeatpoints = function(points) {
 	else {
 		var datapoints = this.negativeHeatmapLayer.getData().getArray();
 		datapoints = datapoints.concat(heatMapData);
-		this.negativeHeatmapLayer.setData(pointArray);
+		this.negativeHeatmapLayer.setData(datapoints);
 	}
 }
 

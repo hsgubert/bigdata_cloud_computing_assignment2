@@ -60,22 +60,23 @@ function mapInit() {
 	function showPoints(keyword) {
 		if (points.hasOwnProperty(keyword)) {
 			heatmap.clearNegativeHeatPoints();
-			heatmap.addNegativeHeatpoints(points[keyword]["-"]);
 			heatmap.clearPositiveHeatPoints();
+			heatmap.addNegativeHeatpoints(points[keyword]["-"]);
 			heatmap.addPositiveHeatpoints(points[keyword]["+"]);
 		}
 		else {
 			loadPointsForKeyword(keyword, function(keyword) {
 				heatmap.clearNegativeHeatPoints();
-				heatmap.addNegativeHeatpoints(points[keyword]["-"]);
 				heatmap.clearPositiveHeatPoints();
+				heatmap.addNegativeHeatpoints(points[keyword]["-"]);
 				heatmap.addPositiveHeatpoints(points[keyword]["+"]);
 			});	
 		}
 	}
 	
 	// load initial points
-	showPoints($("#keywords-select").val());
+	//showPoints($("#keywords-select").val());
+	showPoints("ebola");
 	
 	// on select box change
 	$("#keywords-select").change(function() {

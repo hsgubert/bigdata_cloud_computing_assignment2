@@ -33,7 +33,7 @@ public class Tweets {
 		}
 		
 		Map<String, AttributeValue> negative = dynamoHelper.getItemByPrimaryKey(COMPRESSED_TWEET_TABLE_NAME, "keyword", keyword + '-');
-		if (positive != null && positive.containsKey("clusters")) {
+		if (negative != null && negative.containsKey("clusters")) {
 			JSONArray clusters = new JSONArray(negative.get("clusters").getS());
 			json.put("-", clusters);
 		} else {

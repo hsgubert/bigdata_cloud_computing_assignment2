@@ -91,8 +91,8 @@ public class Compressor {
 						JSONArray point = new JSONArray();
 						point.put(0, Double.valueOf(tweet.get("latitude").getN()));
 						point.put(1, Double.valueOf(tweet.get("longitude").getN()));
-						point.put(2, Double.valueOf(tweet.get("sentiment_score").getN()));
-						
+						point.put(2, Math.abs(Double.valueOf(tweet.get("sentiment_score").getN())));
+
 						long SavedAt = Long.valueOf(tweet.get("saved_at").getN());
 						if (SavedAt > maxSavedAt)
 							maxSavedAt = SavedAt;
