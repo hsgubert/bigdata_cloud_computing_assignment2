@@ -1,0 +1,3 @@
+crontab -e
+
+0 * * * * /usr/bin/java -jar ~/compressor/compressor.jar >> ~/compressor/log.log 2>&1 &

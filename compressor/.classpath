@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="com.amazonaws.eclipse.sdk.AWS_JAVA_SDK"/>
+	<classpathentry kind="lib" path="lib/javaml-0.1.7/javaml-0.1.7.jar"/>
+	<classpathentry kind="lib" path="lib/javaml-0.1.7/components/ajt-2.9.jar"/>
+	<classpathentry kind="lib" path="lib/javaml-0.1.7/components/commons-math-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/javaml-0.1.7/components/Jama-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/javaml-0.1.7/components/libsvm.jar"/>
+	<classpathentry kind="lib" path="lib/javaml-0.1.7/components/weka.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

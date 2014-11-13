@@ -1,0 +1,1 @@
+java -jar keyword_extractor.jar >> log.log 2>&1 &

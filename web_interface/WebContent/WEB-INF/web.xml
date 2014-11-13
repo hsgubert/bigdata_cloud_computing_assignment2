@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>Tweet Map</display-name>
+  <listener>
+	<listener-class>
+    	helpers.ApplicationHelper 
+  	</listener-class>
+  </listener>
+  <mime-mapping>    
+      <extension>js</extension>        
+      <mime-type>application/javascript</mime-type>        
+  </mime-mapping>
+  <mime-mapping>    
+      <extension>css</extension>        
+      <mime-type>text/css</mime-type>        
+  </mime-mapping>
+  <mime-mapping>    
+      <extension>jpg</extension>        
+      <mime-type>image/jpeg</mime-type>        
+  </mime-mapping>
+</web-app>

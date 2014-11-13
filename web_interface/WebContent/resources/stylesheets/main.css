@@ -1,0 +1,42 @@
+
+#login_button {
+	transition: all 0.3s ease 0s;
+}
+#login_button:hover {
+	transform: scale(1.05);
+}
+
+#home_jumbotron{
+	margin-bottom: 0px;
+	border-radius: 12px;
+	padding-top: 30px;
+	padding-bottom: 40px;
+}
+
+#login_signup_forms .login_signup_form {
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin-left: 48px;
+	background-color: #6f5499;
+	background-image: linear-gradient(to bottom, #ccc 0,#aaa 100%);
+}
+
+#login_signup_forms .login_signup_form form {
+	margin-bottom: 0px;	
+}
+
+#login_signup_forms .panel {
+	margin: 0px;
+	box-shadow: none;
+	border: 0px;
+}
+
+.link-blue {
+	color: #2a6496;
+}
+
+#map {
+	height: 80%;
+}
