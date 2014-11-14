@@ -75,8 +75,7 @@ function mapInit() {
 	}
 	
 	// load initial points
-	//showPoints($("#keywords-select").val());
-	showPoints("ebola");
+	showPoints($("#keywords-select").val());
 	
 	// on select box change
 	$("#keywords-select").change(function() {
