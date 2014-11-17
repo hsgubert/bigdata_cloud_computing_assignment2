@@ -23,6 +23,7 @@ public class Compressor {
 
 	static final String TWEET_TABLE_NAME = "assignment2_tweets";
 	static final String COMPRESSED_TWEET_TABLE_NAME = "assignment2_tweets_compressed";
+	static final String TWEETS_COMPRESSED_TOPIC_NAME = "assignment2_tweets_compressed";
 	
 	private static final String[] KEYWORDS = new String[] {
 		"ebola","health","justinbieber","thanksgiving","unemployment",
@@ -34,6 +35,8 @@ public class Compressor {
 	
 	private static DynamoHelper sDynamoHelper = null;
 	private static LogHelper sLogHelper = null;
+	private static SnsHelper sSnsHelper = null;
+	private static String sTopicArn = null;
 	
 	public static void main(String[] args) throws Exception {
 		sLogHelper = LogHelper.getInstance();
@@ -53,6 +56,18 @@ public class Compressor {
 			
 			// create table
 			sDynamoHelper.createTable(attributeDefinitions, keySchemaElements, 3L, 3L, COMPRESSED_TWEET_TABLE_NAME);
+		}
+		
+		// Checks is there is no SNS topic and creates it if necessary
+		sSnsHelper = SnsHelper.getInstance();
+		sTopicArn = sSnsHelper.getTopicArn(TWEETS_COMPRESSED_TOPIC_NAME);
+		if (sTopicArn == null) {
+			sLogHelper.info("Topic " + TWEETS_COMPRESSED_TOPIC_NAME + " does not exist, creating it now");
+			sTopicArn = sSnsHelper.createTopic(TWEETS_COMPRESSED_TOPIC_NAME);
+			if (sTopicArn == null) {
+				sLogHelper.error("Could not create topic");
+				System.exit(1);
+			}
 		}
 		
 		sLogHelper.info("Starting...");
@@ -172,5 +187,9 @@ public class Compressor {
 				sDynamoHelper.putItem(COMPRESSED_TWEET_TABLE_NAME, attrMap);
 			}
 		}
+		
+		sLogHelper.info("Sending notification...");
+		sSnsHelper.publishToTopic(sTopicArn, "clusters updated");
+		sLogHelper.info("Done");
 	}
 }

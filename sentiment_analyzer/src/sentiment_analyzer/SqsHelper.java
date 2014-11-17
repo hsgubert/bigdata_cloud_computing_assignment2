@@ -72,7 +72,7 @@ public class SqsHelper {
 			return null;
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			mLogHelper.printException(e);
 			return null;
 		}
 	}
@@ -95,7 +95,7 @@ public class SqsHelper {
 			return mSqsClient.createQueue(createQueueRequest).getQueueUrl();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			mLogHelper.printException(e);
 			return null;
 		}
 	}
@@ -109,7 +109,7 @@ public class SqsHelper {
 			return true;
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			mLogHelper.printException(e);
 			return false;
 		}
 	}
@@ -127,7 +127,7 @@ public class SqsHelper {
 	        return messages;
         }
 		catch (Exception e) {
-			e.printStackTrace();
+			mLogHelper.printException(e);
 			return new ArrayList<Message>();
 		}
 	}
@@ -141,7 +141,7 @@ public class SqsHelper {
 			return true;
         }
 		catch (Exception e) {
-			e.printStackTrace();
+			mLogHelper.printException(e);
 			return false;
 		}
 	}
