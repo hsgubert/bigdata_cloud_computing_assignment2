@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
@@ -44,13 +46,26 @@ public class DynamoHelper {
 		return sDynamoHelper;
 	}
 
-	private AmazonDynamoDBClient mDynamoDBClient = null;	
+	private AmazonDynamoDBClient mDynamoDBClient = null;
+	private LogHelper mLogHelper = null;
 	
-	public DynamoHelper() {
-		// so amazon refreshes the credentials automatically
-		this.mDynamoDBClient = new AmazonDynamoDBClient(new InstanceProfileCredentialsProvider());
-//		this.mDynamoDBClient = new AmazonDynamoDBClient(new DefaultAWSCredentialsProviderChain().getCredentials());
-
+	public DynamoHelper() throws IOException {
+		mLogHelper = LogHelper.getInstance();
+		
+		mLogHelper.info("Connecting to DynamoDB service");
+		try {
+			// so amazon refreshes the credentials automatically
+			this.mDynamoDBClient = new AmazonDynamoDBClient(new InstanceProfileCredentialsProvider());
+			// test if the credentials work
+			mDynamoDBClient.listTables();
+		}
+		catch (AmazonClientException e) {
+			mLogHelper.info("Not in an Amazon EC2 instance, falling back to DefaultCredentialsChain");
+			// probably is not in an EC2 instance, then look for the credentials in the default chain
+			// (credentials will expire)
+			this.mDynamoDBClient = new AmazonDynamoDBClient(new DefaultAWSCredentialsProviderChain().getCredentials());
+		}
+		
 		// set region to US East
 		mDynamoDBClient.setRegion(Region.getRegion(Regions.US_EAST_1));
 	}
@@ -131,14 +146,14 @@ public class DynamoHelper {
 			catch (ProvisionedThroughputExceededException e) {
 				// we are inserting too fast, sleep for some time (we do not consider that a failure)
 				numberOfProvisionedThroughputExceededExceptionsInARow += 1;
-				System.out.println("Dynamo througput exceeded, sleeping a little bit..");
+				mLogHelper.warning("Dynamo througput exceeded, sleeping a little bit..");
 				try {
 					Thread.sleep(numberOfProvisionedThroughputExceededExceptionsInARow * numberOfProvisionedThroughputExceededExceptionsInARow * 1000);
 				} catch (InterruptedException e1) {	}
 				return true;
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				mLogHelper.printException(e);
 				return false;
 			}
 		}
@@ -156,7 +171,7 @@ public class DynamoHelper {
 
             mDynamoDBClient.deleteItem(deleteItemRequest);
         }  catch (AmazonServiceException ase) {
-                                System.err.println("Failed to get item after deletion " + tableName);
+        	mLogHelper.warning("Failed to delete item of table: " + tableName + " with primary key " + primaryKeyValue + " and range key " + rangeKeyValue);
         } 	
 	}
 	
@@ -178,7 +193,7 @@ public class DynamoHelper {
 			return result.getItem();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			mLogHelper.printException(e);
 			return null;
 		}
 	}
@@ -220,7 +235,7 @@ public class DynamoHelper {
 				}
 			}
 			catch (ProvisionedThroughputExceededException e) {
-				System.out.println("Provisioned throughput exceeded.. sleeping for a sec");
+				mLogHelper.warning("Provisioned throughput exceeded.. sleeping for a sec");
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e1) {	}

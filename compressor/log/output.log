@@ -1,0 +1,62 @@
+Nov 17, 2014 12:03:54 PM compressor.LogHelper info
+INFO: Connecting to DynamoDB service
+Nov 17, 2014 12:03:55 PM compressor.LogHelper info
+INFO: Not in an Amazon EC2 instance, falling back to DefaultCredentialsChain
+Nov 17, 2014 12:03:55 PM compressor.LogHelper info
+INFO: Starting...
+Nov 17, 2014 12:03:55 PM compressor.LogHelper info
+INFO: Processing ebola+
+Nov 17, 2014 12:03:55 PM compressor.LogHelper info
+INFO: Processing ebola-
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing health+
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing health-
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing justinbieber+
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing justinbieber-
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing thanksgiving+
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing thanksgiving-
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing unemployment+
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing unemployment-
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing theflash+
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing theflash-
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing dumbanddumber+
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing dumbanddumber-
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing alibaba+
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing alibaba-
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing iphone+
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing iphone-
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing obama+
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing obama-
+Nov 17, 2014 12:03:56 PM compressor.LogHelper info
+INFO: Processing climate+
+Nov 17, 2014 12:03:57 PM compressor.LogHelper info
+INFO: Processing climate-
+Nov 17, 2014 12:03:57 PM compressor.LogHelper info
+INFO: Processing parade+
+Nov 17, 2014 12:03:57 PM compressor.LogHelper info
+INFO: Processing parade-
+Nov 17, 2014 12:03:57 PM compressor.LogHelper info
+INFO: Processing government+
+Nov 17, 2014 12:03:57 PM compressor.LogHelper info
+INFO: Processing government-
+Nov 17, 2014 12:03:57 PM compressor.LogHelper info
+INFO: Processing _none_+
+Nov 17, 2014 12:03:57 PM compressor.LogHelper info
+INFO: Processing _none_-

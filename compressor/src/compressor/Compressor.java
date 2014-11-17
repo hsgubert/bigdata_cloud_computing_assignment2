@@ -32,10 +32,17 @@ public class Compressor {
 	
 	private static final String[] SIGNS = new String[] { "+","-" };
 	
+	private static DynamoHelper sDynamoHelper = null;
+	private static LogHelper sLogHelper = null;
+	
 	public static void main(String[] args) throws Exception {
+		sLogHelper = LogHelper.getInstance();
+		sDynamoHelper = DynamoHelper.getInstance();
+		
 		// Checks if the DynamoDb table does not exist, and creates it
-		DynamoHelper dynamoHelper = DynamoHelper.getInstance();
-		if (!dynamoHelper.checkIfTableExists(COMPRESSED_TWEET_TABLE_NAME)) {
+		if (!sDynamoHelper.checkIfTableExists(COMPRESSED_TWEET_TABLE_NAME)) {
+			sLogHelper.info("Table " + COMPRESSED_TWEET_TABLE_NAME + " does not exist, creating it.");
+			
 			// create a hash key
 			ArrayList<AttributeDefinition> attributeDefinitions = new ArrayList<AttributeDefinition>();
 			attributeDefinitions.add(new AttributeDefinition().withAttributeName("keyword").withAttributeType("S"));
@@ -45,21 +52,20 @@ public class Compressor {
 			keySchemaElements.add(new KeySchemaElement().withAttributeName("keyword").withKeyType(KeyType.HASH));
 			
 			// create table
-			dynamoHelper.createTable(attributeDefinitions, keySchemaElements, 3L, 3L, COMPRESSED_TWEET_TABLE_NAME);
+			sDynamoHelper.createTable(attributeDefinitions, keySchemaElements, 3L, 3L, COMPRESSED_TWEET_TABLE_NAME);
 		}
 		
-		System.out.println();
-		System.out.println("Starting...");
+		sLogHelper.info("Starting...");
 		for (String unsignedKeyword : KEYWORDS) {
 			for (String sign : SIGNS) {
 				long lastProcessedTweetSavedAt = 0;
 				String keyword = unsignedKeyword + sign;
-				System.out.println("Processing " + keyword);
+				sLogHelper.info("Processing " + keyword);
 				Dataset dataset = new DefaultDataset();
 				JSONArray clusters = null;
 				
 				// first, read the last tweet_id considered to create the last cluster
-				Map<String, AttributeValue> clusterAttrMap = dynamoHelper.getItemByPrimaryKey(COMPRESSED_TWEET_TABLE_NAME, "keyword", keyword);
+				Map<String, AttributeValue> clusterAttrMap = sDynamoHelper.getItemByPrimaryKey(COMPRESSED_TWEET_TABLE_NAME, "keyword", keyword);
 				if (clusterAttrMap != null && clusterAttrMap.containsKey("last_processed_tweet_saved_at")) {
 					lastProcessedTweetSavedAt = Long.valueOf(clusterAttrMap.get("last_processed_tweet_saved_at").getN());
 					
@@ -74,7 +80,7 @@ public class Compressor {
 				} 
 				
 				// Read all new entries of the keyword
-				List<Map<String, AttributeValue>> tweets = dynamoHelper.queryByPrimaryKeyAndIndex(TWEET_TABLE_NAME, "keyword", keyword, "saved_at", String.valueOf(lastProcessedTweetSavedAt+1), "saved_at_index");
+				List<Map<String, AttributeValue>> tweets = sDynamoHelper.queryByPrimaryKeyAndIndex(TWEET_TABLE_NAME, "keyword", keyword, "saved_at", String.valueOf(lastProcessedTweetSavedAt+1), "saved_at_index");
 				
 				// If there is nothing new, return
 				if (tweets.size() == 0) {
@@ -104,7 +110,7 @@ public class Compressor {
 					attrMap.put("last_processed_tweet_saved_at", new AttributeValue().withN(String.valueOf(maxSavedAt)));
 					attrMap.put("clusters", new AttributeValue().withS(clusters.toString()));
 					attrMap.put("saved_at", new AttributeValue().withN(String.valueOf(System.currentTimeMillis())));
-					dynamoHelper.putItem(COMPRESSED_TWEET_TABLE_NAME, attrMap);
+					sDynamoHelper.putItem(COMPRESSED_TWEET_TABLE_NAME, attrMap);
 					
 					continue;
 				}
@@ -163,7 +169,7 @@ public class Compressor {
 				attrMap.put("last_processed_tweet_saved_at", new AttributeValue().withN(String.valueOf(maxSavedAt)));
 				attrMap.put("clusters", new AttributeValue().withS(clusters.toString()));
 				attrMap.put("saved_at", new AttributeValue().withN(String.valueOf(System.currentTimeMillis())));
-				dynamoHelper.putItem(COMPRESSED_TWEET_TABLE_NAME, attrMap);
+				sDynamoHelper.putItem(COMPRESSED_TWEET_TABLE_NAME, attrMap);
 			}
 		}
 	}
