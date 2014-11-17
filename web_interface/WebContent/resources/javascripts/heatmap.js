@@ -30,10 +30,10 @@ Heatmap.getMapStyles = function generateGetMapStyles() {
 Heatmap.getPositiveGradient = function generateGetPositiveGradient() {
 	var gradient = [
 	    'rgba(0, 0, 0, 0)',
-	    'rgba(0, 255, 0, 0.2)',
 	    'rgba(0, 255, 0, 0.4)',
 	    'rgba(0, 255, 0, 0.6)',
 	    'rgba(0, 255, 0, 0.8)',
+	    'rgba(0, 255, 0, 0.9)',
 	    'rgba(0, 255, 0, 1.0)',
 	];
 	return function() {
@@ -44,10 +44,10 @@ Heatmap.getPositiveGradient = function generateGetPositiveGradient() {
 Heatmap.getNegativeGradient = function generateGetNegativeGradient() {
 	var gradient = [
 	    'rgba(0, 0, 0, 0)',
-	    'rgba(255, 0, 0, 0.5)',
-	    'rgba(255, 0, 0, 0.65)',
-	    'rgba(255, 0, 0, 0.75)',
-	    'rgba(255, 0, 0, 0.85)',
+	    'rgba(255, 0, 0, 0.4)',
+	    'rgba(255, 0, 0, 0.6)',
+	    'rgba(255, 0, 0, 0.8)',
+	    'rgba(255, 0, 0, 0.9)',
 	    'rgba(255, 0, 0, 1.0)',
 	];
 	return function() {
@@ -80,7 +80,7 @@ Heatmap.prototype.addPositiveHeatpoints = function(points) {
 		});
 		this.positiveHeatmapLayer.set('gradient', Heatmap.getPositiveGradient());
 		this.positiveHeatmapLayer.set('dissipating', false);
-		this.positiveHeatmapLayer.set('radius', 1);
+		this.positiveHeatmapLayer.set('radius', 1.5);
 		this.positiveHeatmapLayer.setMap(this.map);
 	} 
 	else {
@@ -113,7 +113,7 @@ Heatmap.prototype.addNegativeHeatpoints = function(points) {
 		});
 		this.negativeHeatmapLayer.set('gradient', Heatmap.getNegativeGradient());
 		this.negativeHeatmapLayer.set('dissipating', false);
-		this.negativeHeatmapLayer.set('radius', 1);
+		this.negativeHeatmapLayer.set('radius', 1.5);
 		this.negativeHeatmapLayer.setMap(this.map);
 	} 
 	else {
