@@ -16,3 +16,6 @@ Team:
 * **web_interface**: displays tweets and sentiments in a heatmap for the end user.
 * **Tomcat**: folder where Tomcat is installed, so the whole assignment is auto-contained
 * **Servers**: eclipse servers for testing and debugging locally
+
+# System Architechture
+<img src="https://docs.google.com/drawings/d/1-0kpVn2jIirdW8jG7xQCRI334B91HLugAx7gGbPflwc/pub?w=960&amp;h=720">
