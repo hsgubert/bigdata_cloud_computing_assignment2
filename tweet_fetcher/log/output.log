@@ -6,3 +6,5 @@ Nov 17, 2014 10:40:19 AM tweet_fetcher.LogHelper info
 INFO: Connecting to Twitter API
 Nov 17, 2014 10:40:19 AM tweet_fetcher.LogHelper info
 INFO: Starting to sample tweets
+Nov 17, 2014 10:49:22 AM tweet_fetcher.LogHelper info
+INFO: Tweets received in this run: 100

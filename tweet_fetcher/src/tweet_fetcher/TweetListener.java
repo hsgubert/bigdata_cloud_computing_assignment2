@@ -78,11 +78,7 @@ public class TweetListener implements StatusListener {
 
     @Override
     public void onException(Exception ex) {
-        mLogHelper.error("Exception occured listening to tweets!");
-        mLogHelper.error("Message: " + ex.toString());
-    	for (StackTraceElement line : ex.getStackTrace()) {
-    		mLogHelper.error("    " + line.toString());
-    	}
+    	mLogHelper.printException(ex);
     }
 
 }

@@ -44,4 +44,12 @@ public class LogHelper {
 	public void error(String message) {
 		mLogger.severe(message);
 	}
+	
+	public void printException(Exception e) {
+		error("Exception occured listening to tweets!");
+        error("Message: " + e.toString());
+    	for (StackTraceElement line : e.getStackTrace()) {
+    		error("    " + line.toString());
+    	}
+	}
 }

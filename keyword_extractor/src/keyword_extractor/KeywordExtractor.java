@@ -12,42 +12,57 @@ public class KeywordExtractor {
 	static final String FETCHED_TWEETS_QUEUE_NAME = "assignment2_fetched_tweets";
 	static final String TAGGED_TWEETS_QUEUE_NAME = "assignment2_tagged_tweets";
 	
+	static SqsHelper sSqsHelper = null;
+	static LogHelper sLogHelper = null;
+	
 	public static void main(String[] args) throws IOException {
-		SqsHelper sqsHelper = SqsHelper.getInstance();
-		String fetchedTweetsQueueUrl = sqsHelper.getQueueUrl(FETCHED_TWEETS_QUEUE_NAME);
-		if (fetchedTweetsQueueUrl == null) {
-			System.out.println("There is no fetched tweets queue");
-			System.exit(1);
-		}
-		
-		String taggedTweetsQueueUrl = sqsHelper.getQueueUrl(TAGGED_TWEETS_QUEUE_NAME);
-		if (taggedTweetsQueueUrl == null) {
-			taggedTweetsQueueUrl = sqsHelper.createQueue(TAGGED_TWEETS_QUEUE_NAME);
-			if (taggedTweetsQueueUrl == null) {
-				System.out.println("Could not create tagged tweets queue");
+		try {
+			sLogHelper = LogHelper.getInstance();
+			sSqsHelper = SqsHelper.getInstance();
+			
+			// get fetched tweets queue url (input)
+			String fetchedTweetsQueueUrl = sSqsHelper.getQueueUrl(FETCHED_TWEETS_QUEUE_NAME);
+			if (fetchedTweetsQueueUrl == null) {
+				sLogHelper.error("There is no fetched tweets queue");
 				System.exit(1);
 			}
-		}
-		
-		KeywordHelper keywordHelper = KeywordHelper.getInstance();
-		
-		while (true) {
-			// get fetched tweets
-			List<Message> messages = sqsHelper.receiveMessage(fetchedTweetsQueueUrl);
-			for (Message message : messages) {
-				try {
-					// loads the message and find its keywords
-					JSONObject json = new JSONObject(message.getBody());
-					List<String> keywords = keywordHelper.getKeywords(json.getString("text"));
-					json.put("keywords", keywords);
-					sqsHelper.sendMessage(taggedTweetsQueueUrl, json.toString());
-				} catch (JSONException e) {
-					e.printStackTrace();
-				} finally {
-					// deletes the message
-					sqsHelper.deleteMessage(fetchedTweetsQueueUrl, message.getReceiptHandle());
+			
+			// get tagged tweets queue url (output)
+			String taggedTweetsQueueUrl = sSqsHelper.getQueueUrl(TAGGED_TWEETS_QUEUE_NAME);
+			if (taggedTweetsQueueUrl == null) {
+				taggedTweetsQueueUrl = sSqsHelper.createQueue(TAGGED_TWEETS_QUEUE_NAME);
+				if (taggedTweetsQueueUrl == null) {
+					sLogHelper.error("Could not create tagged tweets queue");
+					System.exit(1);
 				}
 			}
+			
+			KeywordHelper keywordHelper = KeywordHelper.getInstance();
+			
+			while (true) {
+				// get fetched tweets
+				List<Message> messages = sSqsHelper.receiveMessage(fetchedTweetsQueueUrl);
+				for (Message message : messages) {
+					try {
+						// loads the message and find its keywords
+						JSONObject json = new JSONObject(message.getBody());
+						List<String> keywords = keywordHelper.getKeywords(json.getString("text"));
+						json.put("keywords", keywords);
+						sSqsHelper.sendMessage(taggedTweetsQueueUrl, json.toString());
+					} 
+					catch (JSONException e) {
+						sLogHelper.printException(e);
+					} 
+					finally {
+						// deletes the message
+						sSqsHelper.deleteMessage(fetchedTweetsQueueUrl, message.getReceiptHandle());
+					}
+				}
+			}
+		}
+		catch (Exception e) {
+			if (sLogHelper != null)
+				sLogHelper.printException(e);
 		}
 	}
 }
