@@ -1,5 +1,7 @@
 package tweet_fetcher;
 
+import java.io.IOException;
+
 import twitter4j.JSONObject;
 import twitter4j.StallWarning;
 import twitter4j.Status;
@@ -11,15 +13,19 @@ public class TweetListener implements StatusListener {
 	// Queue used to put fetched tweets
 	private String mQueueURL;
 	private SqsHelper mSqsHelper;
+	private LogHelper mLogHelper;
+	private long mTweetsReceived;
 	
-	public TweetListener(String queueUrl) {
+	public TweetListener(String queueUrl) throws IOException {
 		mQueueURL = queueUrl;
 		mSqsHelper = SqsHelper.getInstance();
+		mLogHelper = LogHelper.getInstance();
+		mTweetsReceived = 0;
 	}
 	
 	@Override
     public void onStatus(Status status) {
-        if (status.getGeoLocation() != null && status.getPlace() != null && status.getPlace().getCountryCode().equals("US")) {
+		if (status.getGeoLocation() != null && status.getPlace() != null && status.getPlace().getCountryCode().equals("US")) {
         	try {
         		JSONObject json = new JSONObject();
         		json.put("id", status.getId());
@@ -29,6 +35,11 @@ public class TweetListener implements StatusListener {
         		json.put("latitude", status.getGeoLocation().getLatitude());
         		json.put("longitude", status.getGeoLocation().getLongitude());
         		mSqsHelper.sendMessage(mQueueURL, json.toString());
+        		
+        		mTweetsReceived += 1;
+        		if (mTweetsReceived % 100 == 0) {
+        			mLogHelper.info("Tweets received in this run: " + String.valueOf(mTweetsReceived));
+        		}
 			} 
         	catch (Exception e) { }
 //        	System.out.println("(" + String.valueOf(status.getGeoLocation().getLatitude()) + "," + String.valueOf(status.getGeoLocation().getLongitude()) + "): " + status.getText());
@@ -47,27 +58,31 @@ public class TweetListener implements StatusListener {
 
     @Override
     public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
-//        System.out.println("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
+//    	mLogHelper.warning("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
     }
 
     @Override
     public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
-//        System.out.println("Got track limitation notice:" + numberOfLimitedStatuses);
+    	mLogHelper.warning("Got track limitation notice:" + numberOfLimitedStatuses);
     }
 
     @Override
     public void onScrubGeo(long userId, long upToStatusId) {
-        System.out.println("Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
+        mLogHelper.warning("Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
     }
 
     @Override
     public void onStallWarning(StallWarning warning) {
-//        System.out.println("Got stall warning:" + warning);
+    	mLogHelper.warning("Got stall warning:" + warning);
     }
 
     @Override
     public void onException(Exception ex) {
-        ex.printStackTrace();
+        mLogHelper.error("Exception occured listening to tweets!");
+        mLogHelper.error("Message: " + ex.toString());
+    	for (StackTraceElement line : ex.getStackTrace()) {
+    		mLogHelper.error("    " + line.toString());
+    	}
     }
 
 }

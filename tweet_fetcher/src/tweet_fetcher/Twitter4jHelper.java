@@ -14,6 +14,8 @@ public class Twitter4jHelper {
  
 	// Open communication with Tweet API 
 	public static TwitterStream getTwitterClient() throws IOException {
+		LogHelper.getInstance().info("Connecting to Twitter API");
+		
 		Properties properties = Twitter4jHelper.getProperties();
 		
 		ConfigurationBuilder cb = new ConfigurationBuilder();

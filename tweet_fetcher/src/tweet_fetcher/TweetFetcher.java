@@ -23,6 +23,7 @@ public class TweetFetcher {
 		TwitterStream twitterStream = Twitter4jHelper.getTwitterClient();
         TweetListener listener = new TweetListener(queueUrl); 
         twitterStream.addListener(listener);
+        LogHelper.getInstance().info("Starting to sample tweets");
         twitterStream.sample();
 	}
 

@@ -1,10 +1,13 @@
 package tweet_fetcher;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
@@ -26,7 +29,7 @@ public class SqsHelper {
 
 	// Singleton mechanism
 	private static SqsHelper sSqsHelper;
-	public static SqsHelper getInstance() {
+	public static SqsHelper getInstance() throws IOException {
 		if (sSqsHelper == null) {
 			sSqsHelper = new SqsHelper();
 		}
@@ -34,11 +37,24 @@ public class SqsHelper {
 	}
 	
 	private AmazonSQSClient mSqsClient = null;
+	private LogHelper mLogHelper = null;
 	
-	public SqsHelper() {
-		// so amazon refreshes the credentials automatically
-		this.mSqsClient = new AmazonSQSClient(new InstanceProfileCredentialsProvider());
-//		this.mSqsClient = new AmazonSQSClient(new DefaultAWSCredentialsProviderChain().getCredentials());
+	public SqsHelper() throws IOException {
+		mLogHelper = LogHelper.getInstance();
+		
+		mLogHelper.info("Connecting to SQS service");
+		try {
+			// so amazon refreshes the credentials automatically
+			this.mSqsClient = new AmazonSQSClient(new InstanceProfileCredentialsProvider());
+			// test if the credentials work
+			mSqsClient.listQueues();
+		}
+		catch (AmazonClientException e) {
+			mLogHelper.info("Not in an Amazon EC2 instance, falling back to DefaultCredentialsChain");
+			// probably is not in an EC2 instance, then look for the credentials in the default chain
+			// (credentials will expire)
+			this.mSqsClient = new AmazonSQSClient(new DefaultAWSCredentialsProviderChain().getCredentials());
+		}
 
 		// set region to US East
 		mSqsClient.setRegion(Region.getRegion(Regions.US_EAST_1));
@@ -66,6 +82,8 @@ public class SqsHelper {
 	 * Returns the queue URL or null if it fails
 	 */
 	public String createQueue(String queueName) {
+		mLogHelper.info("Creating queue " + queueName);
+		
 		Map<String,String> queueAttributes = new HashMap<String,String>();
 		queueAttributes.put("ReceiveMessageWaitTimeSeconds", "20");
 		queueAttributes.put("VisibilityTimeout", "1800");

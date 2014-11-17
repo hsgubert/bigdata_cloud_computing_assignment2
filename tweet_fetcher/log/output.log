@@ -1,0 +1,8 @@
+Nov 17, 2014 10:40:17 AM tweet_fetcher.LogHelper info
+INFO: Connecting to SQS service
+Nov 17, 2014 10:40:18 AM tweet_fetcher.LogHelper info
+INFO: Not in an Amazon EC2 instance, falling back to DefaultCredentialsChain
+Nov 17, 2014 10:40:19 AM tweet_fetcher.LogHelper info
+INFO: Connecting to Twitter API
+Nov 17, 2014 10:40:19 AM tweet_fetcher.LogHelper info
+INFO: Starting to sample tweets
