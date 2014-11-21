@@ -48,8 +48,13 @@ public class LogHelper {
 	public void printException(Exception e) {
 		error("Exception occured listening to tweets!");
         error("Message: " + e.toString());
+        
+        StringBuilder stringBuilder = new StringBuilder();
     	for (StackTraceElement line : e.getStackTrace()) {
-    		error("    " + line.toString());
+    		stringBuilder.append("    " + line.toString());
+    	}
+    	if (stringBuilder.length() > 0) {
+    		error(stringBuilder.toString());
     	}
 	}
 }

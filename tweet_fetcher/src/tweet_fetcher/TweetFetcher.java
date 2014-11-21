@@ -30,8 +30,10 @@ public class TweetFetcher {
 	        twitterStream.sample();
 		}
 		catch (Exception e) {
-			if (sLogHelper != null)
+			if (sLogHelper != null) {
+				sLogHelper.error("Exception occured in main loop!");
 				sLogHelper.printException(e);
+			}
 		}
 	}
 

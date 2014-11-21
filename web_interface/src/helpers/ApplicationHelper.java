@@ -18,6 +18,7 @@ public class ApplicationHelper implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent arg0) {
 		try {
 			ApplicationHelper.ensureTablesExist();
+			ApplicationHelper.subscribeToReceiveNotifications();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -25,6 +26,7 @@ public class ApplicationHelper implements ServletContextListener {
 		}
 	}
 	
+
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 		
@@ -44,4 +46,20 @@ public class ApplicationHelper implements ServletContextListener {
 //		Tweets.ensureTableExists();
 	}
 
+	static final String TWEETS_COMPRESSED_TOPIC_NAME = "assignment2_tweets_compressed";
+	static final String ENDPOINT_URL = "http://jhm-assignment.elasticbeanstalk.com/sns_notifications";
+	
+	private static void subscribeToReceiveNotifications() {
+		try {
+			SnsHelper snsHelper = SnsHelper.getInstance();
+			String topicArn = snsHelper.getTopicArn(TWEETS_COMPRESSED_TOPIC_NAME);
+			if (topicArn != null) {
+				if (!snsHelper.checkIfSubscribed(topicArn, ENDPOINT_URL)) {
+					snsHelper.subscribeToTopicViaHttp(topicArn, ENDPOINT_URL);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

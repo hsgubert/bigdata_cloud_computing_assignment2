@@ -1,1 +1,1 @@
- java -jar tweet_fetcher.jar &
+nohup java -jar tweet_fetcher.jar &
