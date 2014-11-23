@@ -5,7 +5,7 @@
 <tags:layout activeTab="map">
 
 <div class="row">
-	<div class="col-xs-12 col-md-6 col-lg-6">
+	<div class="col-xs-8 col-md-6 col-lg-6">
 		<form class="form-inline" role="form">
 			<div class="form-group">
 				<label for="keyword" class="control-label">Keyword filtering </label>
@@ -26,6 +26,10 @@
 				</div>
 			</div>
 		</form>
+	</div>
+	<div class="col-xs-4 col-md-6 col-lg-6">
+		<button id="red" type="button" class="btn btn-danger pull-right">Toogle Red</button>
+		<button id="green" type="button" class="btn btn-success pull-right">Toogle Green</button>
 	</div>
 </div>
 <div class="row">
@@ -81,6 +85,14 @@ function mapInit() {
 	$("#keywords-select").change(function() {
 		var keyword = $(this).val();
 		showPoints(keyword);
+	});
+	
+	$("#green").click(function() {
+		heatmap.togglePositive();
+	});
+	
+	$("#red").click(function() {
+		heatmap.toggleNegative();
 	});
 };
 

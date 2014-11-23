@@ -96,6 +96,14 @@ Heatmap.prototype.clearPositiveHeatPoints = function() {
 	} 
 }
 
+Heatmap.prototype.togglePositive = function() {
+	if (this.positiveHeatmapLayer.getMap() != null) {
+		this.positiveHeatmapLayer.setMap(null);
+	} else {
+		this.positiveHeatmapLayer.setMap(this.map);
+	}
+}
+
 Heatmap.prototype.addNegativeHeatpoints = function(points) {
 	var pointCount = points.length;
 	var heatMapData = [];
@@ -127,5 +135,13 @@ Heatmap.prototype.clearNegativeHeatPoints = function() {
 	if (this.negativeHeatmapLayer != null && this.negativeHeatmapLayer.getData().length > 0) {
 		this.negativeHeatmapLayer.setData([]);
 	} 
+}
+
+Heatmap.prototype.toggleNegative = function() {
+	if (this.negativeHeatmapLayer.getMap() != null) {
+		this.negativeHeatmapLayer.setMap(null);
+	} else {
+		this.negativeHeatmapLayer.setMap(this.map);
+	}
 }
 
