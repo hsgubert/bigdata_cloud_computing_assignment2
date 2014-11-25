@@ -45,7 +45,7 @@ $(window).load(mapInit);
 
 function mapInit() {
 	var heatmap = new Heatmap({containerId: "map"});
-	var points = {};
+	var points = {}; 
 	
 	function loadPointsForKeyword(keyword, callback) {
 		$.get("tweet_points",
@@ -94,6 +94,24 @@ function mapInit() {
 	$("#red").click(function() {
 		heatmap.toggleNegative();
 	});
+	
+	var clusterVersion = -1; 
+	var intervalID = setInterval(function() {
+		$.get("cluster_version",
+			{},
+			function (jsonData) {
+				data = JSON.parse(jsonData);
+				if (data.hasOwnProperty("cluster_version")) {
+					if (clusterVersion > 0) {
+						if (clusterVersion < data["cluster_version"]) {
+							location.reload();
+						}
+					}
+					clusterVersion = data["cluster_version"];
+				}
+			}
+		);
+	}, 30000);
 };
 
 </script>

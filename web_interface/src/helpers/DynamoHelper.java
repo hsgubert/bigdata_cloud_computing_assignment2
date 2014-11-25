@@ -6,8 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
@@ -42,9 +45,17 @@ public class DynamoHelper {
 	private AmazonDynamoDBClient mDynamoDBClient = null;	
 	
 	public DynamoHelper(AWSCredentials awsCredentials) {
-		this.mDynamoDBClient = new AmazonDynamoDBClient(awsCredentials);
-		// so amazon refreshes the credentials automatically
-//		this.mDynamoDBClient = new AmazonDynamoDBClient(new InstanceProfileCredentialsProvider());
+		try {
+			// so amazon refreshes the credentials automatically
+			this.mDynamoDBClient = new AmazonDynamoDBClient(new InstanceProfileCredentialsProvider());
+			// test if the credentials work
+			mDynamoDBClient.listTables();
+		}
+		catch (AmazonClientException e) {
+			// probably is not in an EC2 instance, then look for the credentials in the default chain
+			// (credentials will expire)
+			this.mDynamoDBClient = new AmazonDynamoDBClient(new DefaultAWSCredentialsProviderChain().getCredentials());
+		}
 
 		// set region to US East
 		mDynamoDBClient.setRegion(ApplicationHelper.getAmazonRegion());

@@ -50,6 +50,7 @@ public class SnsNotificationsController extends HttpServlet {
     	else if (messageType.equals("Notification")) {
     		System.out.println("Received notification!!!");
     		// We have to do something here!!! Perhaps websockets to update browsers???
+    		ClusterVersionController.clusterVersion += 1;
     	}
     }
 	
